@@ -296,22 +296,70 @@ namespace myImages {
 `;
             case "image10":
             case "cave-flat-backdrop-sprite":return img`
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
+................................................................
+................................................................
+................................................................
+................................................................
+.111..................................111111111111111111........
+1ddd111.............................11dddddddddddddddddd111.....
+ddddddd1..........................11ddddddddddddddddddddddd11111
+dddddddd111.....................11dddddddddddddddddddddddddddddd
+ddddddddddd111111111111111111111dddddddddddddddddddddddbbbbbbbbb
+dddddddddddddddddddddddddddddddddddddddddddddddddddddbbbbbbbbbbb
+bbbdddddddddddddddddddddddddddddddddddddddddddddbbbbbbbbbbbbbbbb
+bbbbbbbbbbbdddddddddddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbddddddddddddddddbbbbbbbbbbbbbbbbbffbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbfffffbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffffffbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffffffff
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbffffffffff
+bbbbbbbbbbbbbbbbcbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccbbbbbfffffffffff
+bbbbbbbbbbbbbbbcccbbbbbbbbbbbbbbbbbbbbbbbbbbbcccbbbbbfffffffffff
+bbbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbbbbbbbbbbbccccccbbbfffffffffff
+ccbbbbbbbbbbbbccccbbbbbbbbbbbbbbbbbbbbbbbbbccccccccbbfffffffffff
+cccbbbbbbbbbbbcccccbbbbbbbbbbbbbbbbbbbbbbbcccccccccbbfffffffffff
+ccccbbbbbbbbbccccccbbbbbbbbbbbbbbbbbbbbbbccccccccccbbfffffffffff
+ccccccbbbbbcccccccccbbbbbbbbbbbbbbbbbbbbcccccfcccccbffffffffffff
+cccccccccccccccccccccbbbbbbbbbbbbbbbbbbbccccfffcccccffffffffffff
+ccccccccccccccccccccccccccccbbbbbbbbbbbcccccfffcccccffffffffffff
+ccccccccccccccccccccccccccccccccbbbbbbccccccffffccccffffffffffff
+fccccccccccccccccccccccccccccccccccbbcccccccffffcccfffffffffffff
+fcccccccccccccccccccccccccccccccccccccccccccffffcccfffffffffffff
+fcccccccccccccccccccccccccccccccccccccccccccfffffccfffffffffffff
+ffcccccccccccccccffcccccccccccccccccccccccccffffffffffffffffffff
+ffcccccccccccccccfffccccccccccccccccccccccccffffffffffffffffffff
+fffccccccccccccccfffccccccccccccccccccccccccffffffffffffffffffff
+ffffcccccccccccccfffccccccccccccccccccccccccffffffffffffffffffff
+ffffcccccccccccccfffccccccccccccccccccccccccffffffffffffffffffff
+fffffccccccccccccfffccccccccccccccccccccccccffffffffffffffffffff
+ffffffcccccccccccffffcccccccccccccccccccccccffffffffffffffffffff
+fffffffccccccccccffffccccccccccccccccccccccfffffffffffffffffffff
+ffffffffccccccccfffffccccccccccccccccccccccfffffffffffffffffffff
+fffffffffffcccccfffffccccccccccccccccccccccfffffffffffffffffffff
+fffffffffffffcccfffffccccccccccccccccccccccfffffffffffffffffffff
+fffffffffffffffcfffffccccccccccccccccccccccfffffffffffffffffffff
+fffffffffffffffffffffffccccccccccccccccccccfffffffffffffffffffff
+ffffffffffffffffffffffffcccccccccccccccccccfffffffffffffffffffff
+ffffffffffffffffffffffffcccccccccccccccccccfffffffffffffffffffff
+fffffffffffffffffffffffffccccccccccccccccccfffffffffffffffffffff
+fffffffffffffffffffffffffffcccccccccccccccffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 `;
         }
         return null;

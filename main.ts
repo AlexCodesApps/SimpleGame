@@ -53,7 +53,7 @@ const SpecialTiles = {
     Portal: assets.tile`portal-spawn`,
     Tree: assets.tile`tree-spawn`,
     Boulder: assets.tile`boulder-spawn`,
-    CaveBackdrop: assets.image`cave-flat-backdrop-spawn`,
+    CaveBackdrop: assets.tile`cave-flat-backdrop-spawn`,
 }
 // End of the constants
 
@@ -311,7 +311,7 @@ namespace Worlds {
             currentWorld++;
             if (currentWorld < GlobalArray.length) Init();
             else {
-                game.splash("There are no more worlds?");
+                game.splash("You've reached the end of the demo.");
                 game.reset();
             }
         }
@@ -337,7 +337,9 @@ namespace Worlds {
                 }
                 else if (isTile(x, y, SpecialTiles.CaveBackdrop)) {
                     let sprite = LoadADecal(instance.GetArena(SpriteKind.Decal), x, y, SpriteTex.CaveBackdrop);
-                    sprite.setScale(2, ScaleAnchor.Top);
+                    scaling.scaleByPixels(sprite, (instance.Tilemap.height - y) * 16, ScaleDirection.Vertically, ScaleAnchor.Top);
+                    scaling.scaleByPixels(sprite, instance.Tilemap.width * 16, ScaleDirection.Horizontally, ScaleAnchor.Top, false);
+                    sprite.z = -20;
                 }
             }
     }
