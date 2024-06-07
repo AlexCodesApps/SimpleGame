@@ -184,7 +184,7 @@ namespace Player {
         _sprite.vy = 0;
         controller.moveSprite(_sprite, 0, 0);
         _pause = true;
-        return AnimationScheduler.New(_sprite, SpriteAnimTex.PlayerSwirl, 350, false);
+        return AnimationScheduler.New(_sprite, SpriteAnimTex.PlayerSwirl, 70, false);
     }
     export function ResetAnimation() {
         _possible_state = PossibleState.Right;
@@ -519,7 +519,7 @@ namespace Worlds {
                             0, // ymin
                             TileMaps.SecondWorld.height / 2 * 16, // ymax
                             -200, // speed
-                            100); // wait
+                            20); // wait
                 return [
                     undefined,
                     () => {
