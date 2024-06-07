@@ -17,7 +17,7 @@
  *
  * https://arcade.makecode.com/reference
  */
- // Thanks Microsoft.
+// Thanks Microsoft.
 namespace SpriteKind {
     export const Decal = SpriteKind.create();
 } // Decal is a special sprite that can be for background objects
@@ -33,6 +33,7 @@ const SpriteTex = { // Stores sprite images, including player images
     Tree: assets.image`tree-sprite`,
     Boulder: assets.image`boulder-sprite`,
     CaveBackdrop: assets.image`cave-flat-backdrop-sprite`,
+    Blank: assets.image`blank`,
 }
 
 const SpriteAnimTex = { // Stores sprite animations, including player animations
@@ -40,6 +41,8 @@ const SpriteAnimTex = { // Stores sprite animations, including player animations
     PlayerB: assets.animation`player_sprite_back_anim`,
     PlayerFS: assets.animation`player_sprite_front_slide`,
     PlayerBS: assets.animation`player_sprite_back_slide`,
+    PlayerSwirl: assets.animation`player_sprite_swirl_anim`,
+    Seagull: assets.animation`seagull-sprite`,
 }
 
 const TileMaps = { // Stores s
@@ -55,35 +58,43 @@ const SpecialTiles = {
     Boulder: assets.tile`boulder-spawn`,
     CaveBackdrop: assets.tile`cave-flat-backdrop-spawn`,
 }
+
+const Backgrounds = {
+    Sky: assets.image`sky`
+}
 // End of the constants
 
 // The player namespace serves as a singleton manages and serves as an interface for the player sprite
 namespace Player {
     const defaultGravity = 900;
-    const defaultSpeed = 50;
+    const defaultSpeed = 30;
+    const defaultfastSpeed = 225;
     export enum Directions { // Broad Version Of Possible State To Reduce The Amount Of Checking
         Left, Right, Unknown
     }
     enum PossibleState { // Used to set animation without the animation overriding itself every frame, 
         // TODO - Later, make a single function that updates stats depending on state, especially if including 
         // special states for different materials the player might stick to
-        Left, Right, LSlide, RSlide, LJump, RJump
+        Unknown, Left, Right, LSlide, RSlide, LJump, RJump
     }
     let _sprite = sprites.create(SpriteTex.PlayerF, SpriteKind.Player);
     let _jumped: boolean = false;
-    let _possible_state: PossibleState;
-    controller.moveSprite(_sprite, defaultSpeed, 0);
+    let _possible_state: PossibleState = PossibleState.Right;
     _sprite.ay = defaultGravity;
     let _lastDir: Directions = Directions.Unknown; // Last Direction Used For Animation Snapback
     let _currentDir: Directions = Directions.Unknown;
+    let _pause = false;
     export function Sprite() { // Probably Pointless But Does It Matter?
         return _sprite;
     }
     export function Jump() {
+        if (_pause) return;
         if (!_jumped) {
-            controller.moveSprite(_sprite, 200, 0); // Sets Speed Superfast When Jump Is Legal
-            _sprite.vy = -300;
-            if (IsOnWall()) _sprite.vy += 225; // Slows Jump Velocity If Stuck To Wall
+            controller.moveSprite(_sprite, defaultfastSpeed, 0) // Sets Speed Superfast When Jump Is Legal
+            _sprite.vy = -275;
+            if (IsOnWall()) {
+                _sprite.vy += 175; // Slows Jump Velocity If Stuck To Wall
+            }
             _jumped = true;
             if (_possible_state != PossibleState.LJump && _possible_state != PossibleState.RJump) { // If Jumping, Skip Code
                 if (_currentDir == Directions.Left) {
@@ -95,12 +106,13 @@ namespace Player {
             }
         }
     }
-
     export function CancelJumpOverride() { // To Be Run When Hitting The Ground Or Wall
+        if (_pause) return;
         controller.moveSprite(_sprite, defaultSpeed, 0); // Reset Speed
         _jumped = false;
     }
     export function UpdateAnimation() { // Updates Animation And State
+        if (_possible_state === PossibleState.Unknown) return;
         if (!_sprite.isHittingTile(CollisionDirection.Bottom)) { // Is The Player Not Touching The Ground?
             if (IsOnWall()) {
                 /* Bunch of Code That Just Checks If Direction Is Right And State Isn't Already Set
@@ -142,7 +154,7 @@ namespace Player {
         }
     }
     export function IsOnWall() {
-        return _sprite.isHittingTile(CollisionDirection.Left) || _sprite.isHittingTile(CollisionDirection.Right)
+        return _sprite.isHittingTile(CollisionDirection.Left) || _sprite.isHittingTile(CollisionDirection.Right);
     }
     // Checks if LF Direction Has Changed, Then Saves The Previous Direction In _lastDir and Updates _currentDir
     export function RegisterLFDirection(move: Directions) {
@@ -160,8 +172,26 @@ namespace Player {
     }
     // If Sprite Is On Wall Slow Gravity, else reset Gravity
     export function UpdateGravity() {
-        if (IsOnWall()) _sprite.ay = 100;
+        if (_pause) return;
+        if (IsOnWall() && (_possible_state == PossibleState.LSlide || _possible_state == PossibleState.RSlide)) _sprite.ay = 100;
         else _sprite.ay = defaultGravity;
+    }
+
+    export function TransitionAnimation() {
+        _possible_state = PossibleState.Unknown;
+        _currentDir = Directions.Unknown;
+        _sprite.ay = 0;
+        _sprite.vy = 0;
+        controller.moveSprite(_sprite, 0, 0);
+        _pause = true;
+        return AnimationScheduler.New(_sprite, SpriteAnimTex.PlayerSwirl, 350, false);
+    }
+    export function ResetAnimation() {
+        _possible_state = PossibleState.Right;
+        _currentDir = Directions.Right;
+        controller.moveSprite(_sprite, defaultSpeed, 0);
+        _pause = false;
+        UpdateAnimation();
     }
 }
 // Global Settings That Can Last Multiple Games
@@ -195,10 +225,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, () => {
     So The Player State Can Change
 */
 controller.left.onEvent(ControllerButtonEvent.Pressed, () => {
-    Player.RegisterLFDirection(Player.Directions.Left);
+    if (!GameSettings.Paused) Player.RegisterLFDirection(Player.Directions.Left);
 });
 controller.right.onEvent(ControllerButtonEvent.Pressed, () => {
-    Player.RegisterLFDirection(Player.Directions.Right);
+    if (!GameSettings.Paused) Player.RegisterLFDirection(Player.Directions.Right);
 });
 
 controller.left.onEvent(ControllerButtonEvent.Released, () => {
@@ -207,6 +237,52 @@ controller.left.onEvent(ControllerButtonEvent.Released, () => {
 controller.right.onEvent(ControllerButtonEvent.Released, () => {
     Player.RegisterStopMovement(Player.Directions.Right);
 });
+
+namespace AnimationScheduler {
+    const animator_counter_inc: number = 25;
+    class Animator {
+        counter: number = 0;
+        wait: number;
+        constructor(sprite: Sprite, anim: Image[], speed: number) {
+            animation.runImageAnimation(sprite, anim, speed, false);
+            this.wait = speed * anim.length;
+        }
+        Update() {
+            this.counter += animator_counter_inc;
+            if (this.counter > this.wait) {
+                return true;
+            }
+            return false;
+        }
+    }
+    let arr: [Animator, boolean][] = [];
+    let freeList: number[] = [];
+    export function New(sprite: Sprite, anim: Image[], speed: number, autodel?: boolean) {
+        let nindex = arr.length;
+        if (freeList.length != 0) {
+            nindex = freeList[freeList.length - 1];
+            freeList.splice(freeList.length - 1, 1);
+        }
+        arr[nindex] = [new Animator(sprite, anim, speed), (autodel != undefined) ? autodel : false];
+        return nindex;
+    }
+    export function Update() {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] == undefined) continue;
+            let [an, b] = arr[i];
+            if (an.Update() == true) {
+                if (b == true) freeList.push(i);
+                arr[i] = undefined;
+            }
+        }
+    }
+    export function IsValid(id: number) {
+        return (arr[id] !== undefined);
+    }
+    export function Remove(id: number) {
+        freeList.push(id);
+    }
+}
 
 /* 
 A Lifetime Manager for Sprites that allow you to make new sprites easily, but
@@ -247,6 +323,68 @@ class SpriteArena {
         return this.SpriteKind;
     }
 }
+
+namespace FunctionFactory {
+    export function // I can't even read this 💀 Its Supposed To Gen A Function That Makes An Animated Sprite Move
+        StaticMovingSpriteRange(
+            setSpriteCallBack: (sprite: Sprite) => void,
+            xmin: number, xmax: number,
+            ymin: number, ymax: number,
+            speedx: number, speedy: number,
+            ms: number) {
+        let counter: number = 0;
+        return () => {
+            counter++;
+            if (counter > ms) {
+                counter = 0;
+                let sprite = sprites.createProjectile(SpriteTex.Blank, speedx, speedy, SpriteKind.Decal);
+                sprite.setPosition(Math.randomRange(xmin, xmax), Math.randomRange(ymin, ymax));
+                setSpriteCallBack(sprite);
+            }
+        }
+    }
+    export function
+        StaticMovingSpriteXRange(
+            setSpriteCallBack: (sprite: Sprite) => void,
+            xmin: number, xmax: number,
+            y: number,
+            speedx: number, speedy: number,
+            ms: number) {
+        return StaticMovingSpriteRange(
+            setSpriteCallBack,
+            xmin, xmax,
+            y, y,
+            speedx, speedy,
+            ms);
+    }
+    export function
+        StaticMovingSpriteYRange(
+            setSpriteCallBack: (sprite: Sprite) => void,
+            x: number,
+            ymin: number, ymax: number,
+            speedx: number, speedy: number,
+            ms: number) {
+        return StaticMovingSpriteRange(
+            setSpriteCallBack,
+            x, x,
+            ymin, ymax,
+            speedx, speedy,
+            ms);
+    }
+    export function SeagullFlying(x: number, ymin: number, ymax: number, speed: number, ms: number) {
+        return StaticMovingSpriteYRange(
+            (spr) => {
+                AnimationScheduler.New(spr, SpriteAnimTex.Seagull, 350, true);
+                spr.z = -200;
+                spr.setFlag(SpriteFlag.GhostThroughWalls, true);
+            },
+            x,
+            ymin, ymax,
+            speed, 0,
+            ms
+        );
+    }
+}
 /*
 The Worlds Namespace Manages Game Worlds 
 And Their Respective State
@@ -258,9 +396,9 @@ namespace Worlds {
                     */
         Tilemap: tiles.TileMapData;
         SpriteArenas: SpriteArena[] = [];
-        StartF: () => void; // These Functions Are Optional -
-        UpdateF: () => void; // Callbacks That Maybe Be Used -
-        EndF: () => void; // To Add Additional Special Logic
+        StartF: (self?: Instance) => void; // These Functions Are Optional -
+        UpdateF: (self?: Instance) => void; // Callbacks That Maybe Be Used -
+        EndF: (self?: Instance) => void; // To Add Additional Special Logic
         HitPortalFlag: boolean = false; // Flags If Sprite Entered The Portal For The Worlds Manager
         constructor(Data: tiles.TileMapData,
             SF?: () => void, UF?: () => void, EF?: () => void) {
@@ -269,6 +407,12 @@ namespace Worlds {
             this.UpdateF = (UF) ? UF : function () { };
             this.EndF = (EF) ? EF : function () { };
         }
+        static StateClosure(Data: tiles.TileMapData,
+            _tuplef: () =>
+                [(self?: Instance) => void, (self?: Instance) => void, (self?: Instance) => void]) {
+            let [f, s, t] = _tuplef();
+            return new Instance(Data, f, s, t);
+        }
         OnStart() {
             tiles.setCurrentTilemap(this.Tilemap);
             tiles.placeOnRandomTile(Player.Sprite(), SpecialTiles.Player);
@@ -276,13 +420,13 @@ namespace Worlds {
             this.StartF();
         }
         OnUpdate() {
-            this.UpdateF();
+            this.UpdateF(this);
             if (tiles.tileAtLocationEquals(Player.Sprite().tilemapLocation(), SpecialTiles.Portal)) {
                 this.HitPortalFlag = true;
             }
         }
         OnEnd() {
-            this.EndF();
+            this.EndF(this);
             for (let arena of this.SpriteArenas) {
                 arena.Clear();
             }
@@ -297,23 +441,45 @@ namespace Worlds {
         }
     }
     let currentWorld: number = 0;
-
+    let transitionState: boolean = false;
+    let overrideTrans: boolean = false;
+    let playerAnimHandle: number = 0;
     export function Init() {
         let world = GlobalArray[currentWorld];
         world.OnStart();
         LoadDecals(world);
     }
     export function Update() { // Run During Main loop, Handles World Swapping Logic
+        if (transitionState) {
+            if (!overrideTrans) {
+                transitionState = false;
+                GlobalArray[currentWorld].OnEnd();
+                currentWorld++;
+                if (currentWorld >= GlobalArray.length) {
+                    game.splash("You've reached the end of the demo.");
+                    game.reset();
+                }
+                else {
+                    Player.ResetAnimation();
+                    scene.cameraFollowSprite(Player.Sprite());
+                    Init();
+                }
+            }
+            else {
+                if (!AnimationScheduler.IsValid(playerAnimHandle)) {
+                    AnimationScheduler.Remove(playerAnimHandle);
+                    overrideTrans = false;
+                }
+            }
+            return;
+        }
         let world = GlobalArray[currentWorld];
         world.OnUpdate();
         if (world.HitPortalFlag) {
-            world.OnEnd();
-            currentWorld++;
-            if (currentWorld < GlobalArray.length) Init();
-            else {
-                game.splash("You've reached the end of the demo.");
-                game.reset();
-            }
+            transitionState = true;
+            overrideTrans = true;
+            playerAnimHandle = Player.TransitionAnimation();
+            scene.centerCameraAt(Player.Sprite().x, Player.Sprite().y);
         }
     }
     function LoadADecal(arena: SpriteArena, x: number, y: number, img: Image) {
@@ -330,7 +496,6 @@ namespace Worlds {
             for (let y = 0; y < instance.Tilemap.height; y++) {
                 if (isTile(x, y, SpecialTiles.Tree)) {
                     let sprite = LoadADecal(instance.GetArena(SpriteKind.Decal), x, y, SpriteTex.Tree);
-                    sprite.setScale(1.5, ScaleAnchor.Bottom);
                 }
                 else if (isTile(x, y, SpecialTiles.Boulder)) {
                     LoadADecal(instance.GetArena(SpriteKind.Decal), x, y, SpriteTex.Boulder);
@@ -346,12 +511,28 @@ namespace Worlds {
     // World Instance Main Location
     let GlobalArray: Instance[] = [
         new Instance(TileMaps.FirstWorld),
-        new Instance(TileMaps.SecondWorld),
+        Instance.StateClosure(TileMaps.SecondWorld,
+            () => {
+                let seagullsfly: () => void =
+                    FunctionFactory.SeagullFlying
+                        (TileMaps.SecondWorld.width * 16, // x
+                            0, // ymin
+                            TileMaps.SecondWorld.height / 2 * 16, // ymax
+                            -200, // speed
+                            100); // wait
+                return [
+                    undefined,
+                    () => {
+                        seagullsfly();
+                    },
+                    undefined
+                ]
+            }),
     ];
 }
 // Pre-Startup Initialization
 GameSettings.LoadSettings();
-scene.setBackgroundImage(assets.image`sky`);
+scene.setBackgroundImage(Backgrounds.Sky);
 scene.cameraFollowSprite(Player.Sprite());
 info.setLife(GameSettings.PlayerLives);
 scene.systemMenu.addEntry(() => "Hello?", () => {
@@ -368,6 +549,7 @@ game.onUpdate(() => {
     }
     Player.UpdateGravity();
     Player.UpdateAnimation();
+    AnimationScheduler.Update();
     Worlds.Update();
 });
 game.onGameOver((state) => {
