@@ -41,44 +41,6 @@ e e e e e e e e e e e e e e e e
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 `;
-            case "myTiles.tile9":
-            case "player-spawn":return img`
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-a a a a a a a a f f f f f f f f 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-f f f f f f f f a a a a a a a a 
-`;
-            case "myTiles.tile10":
-            case "portal-spawn":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . a f f . . . . . . . . 
-. . . . f f f f f . . . . . . . 
-. . . . f f f f f f f f f . . . 
-. . . f f a a a a a a a f f . . 
-. . . f a b b b b b b b a f . . 
-. . 1 f a b b a a a b b a f . . 
-. f f f a b b a f f a b a 1 . . 
-. f f f a b a f f f a b a f . . 
-a a a f a b a a f a b b a f . . 
-a f a f a b b a a a b b a f . . 
-a a a f a b b b b b b b a f . . 
-. . f f f a a a a a a a f f f . 
-. . . . f 1 f f f f f f f f f . 
-. . . . f f f f . . . f f a f . 
-. . . . . . . . . . . f f f a . 
-`;
             case "myTiles.transparency16":
             case "blank":return img`
 . . . . . . . . . . . . . . . . 
@@ -97,101 +59,6 @@ a a a f a b b b b b b b a f . .
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
-`;
-            case "myTiles.tile13":
-            case "bigstone-1":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . c b b b b b b b b b b . . . 
-c b b b b b b b b b b b b c c . 
-c b b b b b b b b b b b b b b c 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c b b b b b b b b b b b b b b b 
-c c c c c c c c c c c c c c c c 
-`;
-            case "myTiles.tile14":
-            case "bigstone-2":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-b b b b b b b b . . . . . . . . 
-b b b b b b b b b b b b . . . . 
-b b b b b b b b b b b b b . . . 
-b b b b b b b b b b b b b . . . 
-b b b b b b b b b b b b b b . . 
-b b b b b b b b b b b b b b . . 
-b b b b b b b b b b b b b b . . 
-b b b b b b b b b b b b b b b . 
-c c c c c c c c c c c c c c c . 
-`;
-            case "myTiles.tile15":
-            case "tree-spawn":return img`
-. . . . . . 7 7 7 7 . . . . . . 
-. . . . . 7 7 7 7 7 7 . . . . . 
-. . . . . 7 7 7 7 7 7 . . . . . 
-. . . . 7 7 7 7 7 7 7 7 . . . . 
-. . . . 7 7 7 7 7 7 7 7 . . . . 
-. . . 6 7 7 7 7 7 7 7 7 6 . . . 
-. . . 6 6 7 7 7 7 7 7 6 6 . . . 
-. . . . . 6 6 6 6 6 6 . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-. . . . . . e e e e . . . . . . 
-`;
-            case "myTiles.tile16":
-            case "boulder-spawn":return img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . 6 6 6 6 c . . . . . . 
-. . . 6 6 6 6 6 6 c c c . . . . 
-. . . 6 6 6 6 6 6 6 c c . . . . 
-. 6 6 6 6 6 6 6 6 6 c c . . . . 
-. 6 6 6 6 6 6 6 6 6 6 c c . . . 
-. 6 6 6 6 6 6 6 6 6 6 c c . . . 
-. 6 6 6 6 6 6 6 6 6 6 c c . . . 
-`;
-            case "myTiles.tile17":
-            case "cave-flat-backdrop-spawn":return img`
-c c c c c c c c c c c c c c c c 
-c 5 5 5 5 c 5 5 5 5 c c c c c c 
-c 5 c c c c 5 c c 5 c c c c c c 
-c 5 c c c c 5 c c 5 c c c c c c 
-c 5 c c c c 5 5 5 5 c c c c c c 
-c 5 c c c c 5 c c 5 c c c c c c 
-c 5 5 5 5 c 5 c c 5 c c c c c c 
-c c c c c c c c c c c c c c c c 
-c c c c c c c c c c c c c c c c 
-c 5 c c c 5 c 5 5 5 5 c c c c c 
-c 5 c c c 5 c 5 c c c c c c c c 
-c 5 c c c 5 c 5 c c c c c c c c 
-c 5 c c c 5 c 5 5 5 c c c c c c 
-c c 5 c 5 c c 5 c c c c c c c c 
-c c c 5 c c c 5 5 5 5 c c c c c 
-c c c c c c c c c c c c c c c c 
 `;
             case "myTiles.tile1":
             case "grass":return img`
@@ -440,6 +307,158 @@ f e e e e e e e e e e e e e e f
 f e e e e e e e e e e e e e e f 
 f e e e e e e e e e e e e e e f 
 `;
+            case "myTiles.tile9":
+            case "player_spawn":return img`
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+a a a a a a a a f f f f f f f f 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+f f f f f f f f a a a a a a a a 
+`;
+            case "myTiles.tile10":
+            case "portal_spawn":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . a f f . . . . . . . . 
+. . . . f f f f f . . . . . . . 
+. . . . f f f f f f f f f . . . 
+. . . f f a a a a a a a f f . . 
+. . . f a b b b b b b b a f . . 
+. . 1 f a b b a a a b b a f . . 
+. f f f a b b a f f a b a 1 . . 
+. f f f a b a f f f a b a f . . 
+a a a f a b a a f a b b a f . . 
+a f a f a b b a a a b b a f . . 
+a a a f a b b b b b b b a f . . 
+. . f f f a a a a a a a f f f . 
+. . . . f 1 f f f f f f f f f . 
+. . . . f f f f . . . f f a f . 
+. . . . . . . . . . . f f f a . 
+`;
+            case "myTiles.tile13":
+            case "bigstone-l":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . c b b b b b b b b b b . . . 
+c b b b b b b b b b b b b c c . 
+c b b b b b b b b b b b b b b c 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c b b b b b b b b b b b b b b b 
+c c c c c c c c c c c c c c c c 
+`;
+            case "myTiles.tile14":
+            case "bigstone-r":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+b b b b b b b b . . . . . . . . 
+b b b b b b b b b b b b . . . . 
+b b b b b b b b b b b b b . . . 
+b b b b b b b b b b b b b . . . 
+b b b b b b b b b b b b b b . . 
+b b b b b b b b b b b b b b . . 
+b b b b b b b b b b b b b b . . 
+b b b b b b b b b b b b b b b . 
+c c c c c c c c c c c c c c c . 
+`;
+            case "myTiles.tile15":
+            case "tree_spawn":return img`
+. . . . . . 7 7 7 7 . . . . . . 
+. . . . . 7 7 7 7 7 7 . . . . . 
+. . . . . 7 7 7 7 7 7 . . . . . 
+. . . . 7 7 7 7 7 7 7 7 . . . . 
+. . . . 7 7 7 7 7 7 7 7 . . . . 
+. . . 6 7 7 7 7 7 7 7 7 6 . . . 
+. . . 6 6 7 7 7 7 7 7 6 6 . . . 
+. . . . . 6 6 6 6 6 6 . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+. . . . . . e e e e . . . . . . 
+`;
+            case "myTiles.tile16":
+            case "boulder_spawn":return img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . 6 6 6 6 c . . . . . . 
+. . . 6 6 6 6 6 6 c c c . . . . 
+. . . 6 6 6 6 6 6 6 c c . . . . 
+. 6 6 6 6 6 6 6 6 6 c c . . . . 
+. 6 6 6 6 6 6 6 6 6 6 c c . . . 
+. 6 6 6 6 6 6 6 6 6 6 c c . . . 
+. 6 6 6 6 6 6 6 6 6 6 c c . . . 
+`;
+            case "myTiles.tile17":
+            case "cave_flat_backdrop_spawn":return img`
+c c c c c c c c c c c c c c c c 
+c 5 5 5 5 c 5 5 5 5 c c c c c c 
+c 5 c c c c 5 c c 5 c c c c c c 
+c 5 c c c c 5 c c 5 c c c c c c 
+c 5 c c c c 5 5 5 5 c c c c c c 
+c 5 c c c c 5 c c 5 c c c c c c 
+c 5 5 5 5 c 5 c c 5 c c c c c c 
+c c c c c c c c c c c c c c c c 
+c c c c c c c c c c c c c c c c 
+c 5 c c c 5 c 5 5 5 5 c c c c c 
+c 5 c c c 5 c 5 c c c c c c c c 
+c 5 c c c 5 c 5 c c c c c c c c 
+c 5 c c c 5 c 5 5 5 c c c c c c 
+c c 5 c 5 c c 5 c c c c c c c c 
+c c c 5 c c c 5 5 5 5 c c c c c 
+c c c c c c c c c c c c c c c c 
+`;
+            case "myTiles.tile23":
+            case "spike_sprite_spawn":return img`
+. . . . . . . c c . . . . . . . 
+. . . . . . . c 6 . . . . . . . 
+. . . . . . . c 6 . . . . . . . 
+. . . . . . c c 6 6 . . . . . . 
+. . . . . . c 6 6 9 . . . . . . 
+. . . . . c c 6 6 9 . . . . . . 
+. . . . . c 6 6 6 9 9 . . . . . 
+. . . . c c 6 6 6 6 9 9 . . . . 
+. . . . c c 6 6 6 6 6 9 . . . . 
+. . . c c 6 6 6 6 6 6 6 9 . . . 
+. . . c 6 6 6 6 6 6 6 6 9 . . . 
+. . c c 6 6 6 6 6 6 6 6 9 9 . . 
+. . c 6 6 6 6 6 6 6 6 6 6 6 . . 
+. c c 6 6 6 6 6 6 6 6 6 6 6 6 . 
+. c c 6 6 6 6 6 6 6 6 6 6 6 6 . 
+c c c c c c c c 6 6 6 6 6 6 6 6 
+`;
         }
         return null;
     })
@@ -468,21 +487,7 @@ namespace myTiles {
     //% fixedInstance jres blockIdentity=images._tile
     export const tile8 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
-    export const tile9 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile10 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
     export const transparency16 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile13 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile14 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile15 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile16 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
-    export const tile17 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile1 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
@@ -509,6 +514,22 @@ namespace myTiles {
     export const tile21 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
     export const tile22 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile9 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile10 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile13 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile14 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile15 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile16 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile17 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile23 = image.ofBuffer(hex``);
 
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
@@ -532,7 +553,7 @@ namespace myTiles {
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
 `, [myTiles.transparency16,sprites.builtin.forestTiles6,sprites.builtin.forestTiles10,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile5,myTiles.tile6,myTiles.tile7,myTiles.tile9,myTiles.tile10,myTiles.tile15,myTiles.tile12,myTiles.tile11,myTiles.tile18,myTiles.tile19,myTiles.tile20], TileScale.Sixteen);
             case "world2":
-            case "world2":return tiles.createTilemap(hex`10001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004030000000000000700040103000000051000000000000000000f021000000000080000000b000101010f02100000000000000401010102020202020c00000e0000000f0202020202020210000000120000000f02020202020202100000000800000005020202020202021000000000000000000511020202020210000000000000000000000f0202020210000000000000000000000f0202020210090a00000d00000000060f`, img`
+            case "world2":return tiles.createTilemap(hex`10001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000130000000004030000000000000700040103000000051000000000000000000f021000000000080000000b000101010f02100000000000000401010102020202020c00000e0000000f0202020202020210000000120000000f02020202020202100000000800000005020202020202021000000000000000000511020202020210000000000000000000000f0202020210000000000000000000000f0202020210090a00000d00000000060f`, img`
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
@@ -549,7 +570,7 @@ namespace myTiles {
 2 2 2 2 2 . . . . . . . . . . 2 
 2 2 2 2 2 . . . . . . . . . . 2 
 2 2 2 2 2 2 . . . . . . . . . 2 
-`, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile6,myTiles.tile9,myTiles.tile10,myTiles.tile12,myTiles.tile13,myTiles.tile14,myTiles.tile15,myTiles.tile7,myTiles.tile16,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile22], TileScale.Sixteen);
+`, [myTiles.transparency16,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile6,myTiles.tile9,myTiles.tile10,myTiles.tile12,myTiles.tile13,myTiles.tile14,myTiles.tile15,myTiles.tile7,myTiles.tile16,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile22,myTiles.tile23], TileScale.Sixteen);
         }
         return null;
     })
@@ -560,22 +581,8 @@ namespace myTiles {
             case "tile2":return myTiles.tile2;
             case "myTile":
             case "tile8":return myTiles.tile8;
-            case "player-spawn":
-            case "tile9":return myTiles.tile9;
-            case "portal-spawn":
-            case "tile10":return myTiles.tile10;
             case "blank":
             case "transparency16":return myTiles.transparency16;
-            case "bigstone-1":
-            case "tile13":return myTiles.tile13;
-            case "bigstone-2":
-            case "tile14":return myTiles.tile14;
-            case "tree-spawn":
-            case "tile15":return myTiles.tile15;
-            case "boulder-spawn":
-            case "tile16":return myTiles.tile16;
-            case "cave-flat-backdrop-spawn":
-            case "tile17":return myTiles.tile17;
             case "grass":
             case "tile1":return myTiles.tile1;
             case "grass_top_right":
@@ -602,6 +609,22 @@ namespace myTiles {
             case "tile21":return myTiles.tile21;
             case "grass1":
             case "tile22":return myTiles.tile22;
+            case "player_spawn":
+            case "tile9":return myTiles.tile9;
+            case "portal_spawn":
+            case "tile10":return myTiles.tile10;
+            case "bigstone-l":
+            case "tile13":return myTiles.tile13;
+            case "bigstone-r":
+            case "tile14":return myTiles.tile14;
+            case "tree_spawn":
+            case "tile15":return myTiles.tile15;
+            case "boulder_spawn":
+            case "tile16":return myTiles.tile16;
+            case "cave_flat_backdrop_spawn":
+            case "tile17":return myTiles.tile17;
+            case "spike_sprite_spawn":
+            case "tile23":return myTiles.tile23;
         }
         return null;
     })

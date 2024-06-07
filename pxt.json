@@ -14,7 +14,8 @@
     "dependencies": {
         "device": "*",
         "arcade-tile-util": "github:microsoft/arcade-tile-util#v1.2.0",
-        "sprite-scaling": "*"
+        "sprite-scaling": "*",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1"
     },
     "testDependencies": {}
 }

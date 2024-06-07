@@ -1,6 +1,6 @@
 {
     "editor.formatOnType": true,
-    "files.autoSave": "afterDelay",
+    "files.autoSave": "off",
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/built/**": true,

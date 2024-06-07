@@ -30,10 +30,11 @@ const SpriteTex = { // Stores sprite images, including player images
     PlayerB: assets.image`player_sprite_back`,
     PlayerFJ: assets.image`player_sprite_front_jump`,
     PlayerBJ: assets.image`player_sprite_back_jump`,
-    Tree: assets.image`tree-sprite`,
-    Boulder: assets.image`boulder-sprite`,
-    CaveBackdrop: assets.image`cave-flat-backdrop-sprite`,
+    Tree: assets.image`tree_sprite`,
+    Boulder: assets.image`boulder_sprite`,
+    CaveBackdrop: assets.image`cave_flat_backdrop_sprite`,
     Blank: assets.image`blank`,
+    Spike: assets.image`spike_sprite`
 }
 
 const SpriteAnimTex = { // Stores sprite animations, including player animations
@@ -42,7 +43,8 @@ const SpriteAnimTex = { // Stores sprite animations, including player animations
     PlayerFS: assets.animation`player_sprite_front_slide`,
     PlayerBS: assets.animation`player_sprite_back_slide`,
     PlayerSwirl: assets.animation`player_sprite_swirl_anim`,
-    Seagull: assets.animation`seagull-sprite`,
+    Seagull: assets.animation`seagull_sprite`,
+    SpikeShine: assets.animation`spike_sprite_shine`,
 }
 
 const TileMaps = { // Stores s
@@ -52,11 +54,12 @@ const TileMaps = { // Stores s
 
 const SpecialTiles = {
     Blank: assets.tile`blank`,
-    Player: assets.tile`player-spawn`,
-    Portal: assets.tile`portal-spawn`,
-    Tree: assets.tile`tree-spawn`,
-    Boulder: assets.tile`boulder-spawn`,
-    CaveBackdrop: assets.tile`cave-flat-backdrop-spawn`,
+    Player: assets.tile`player_spawn`,
+    Portal: assets.tile`portal_spawn`,
+    Tree: assets.tile`tree_spawn`,
+    Boulder: assets.tile`boulder_spawn`,
+    CaveBackdrop: assets.tile`cave_flat_backdrop_spawn`,
+    Spike: assets.tile`spike_sprite_spawn`,
 }
 
 const Backgrounds = {
@@ -69,7 +72,7 @@ namespace Player {
     const defaultGravity = 900;
     const defaultSpeed = 30;
     const defaultfastSpeed = 225;
-    export enum Directions { // Broad Version Of Possible State To Reduce The Amount Of Checking
+    export enum LFDirections { // Broad Version Of Possible State To Reduce The Amount Of Checking
         Left, Right, Unknown
     }
     enum PossibleState { // Used to set animation without the animation overriding itself every frame, 
@@ -81,23 +84,21 @@ namespace Player {
     let _jumped: boolean = false;
     let _possible_state: PossibleState = PossibleState.Right;
     _sprite.ay = defaultGravity;
-    let _lastDir: Directions = Directions.Unknown; // Last Direction Used For Animation Snapback
-    let _currentDir: Directions = Directions.Unknown;
-    let _pause = false;
+    let _lastDir: LFDirections = LFDirections.Unknown; // Last Direction Used For Animation Snapback
+    let _currentDir: LFDirections = LFDirections.Unknown;
     export function Sprite() { // Probably Pointless But Does It Matter?
         return _sprite;
     }
     export function Jump() {
-        if (_pause) return;
         if (!_jumped) {
-            controller.moveSprite(_sprite, defaultfastSpeed, 0) // Sets Speed Superfast When Jump Is Legal
+            SetMoveSpeed(defaultfastSpeed); // Sets Speed Superfast When Jump Is Legal
             _sprite.vy = -275;
             if (IsOnWall()) {
                 _sprite.vy += 175; // Slows Jump Velocity If Stuck To Wall
             }
             _jumped = true;
             if (_possible_state != PossibleState.LJump && _possible_state != PossibleState.RJump) { // If Jumping, Skip Code
-                if (_currentDir == Directions.Left) {
+                if (_currentDir == LFDirections.Left) {
                     _possible_state = PossibleState.LJump;
                 } // Switch Jump State Based On Direction
                 else {
@@ -106,9 +107,11 @@ namespace Player {
             }
         }
     }
+    function SetMoveSpeed(speed: number) {
+        controller.moveSprite(_sprite, speed, 0);
+    }
     export function CancelJumpOverride() { // To Be Run When Hitting The Ground Or Wall
-        if (_pause) return;
-        controller.moveSprite(_sprite, defaultSpeed, 0); // Reset Speed
+        SetMoveSpeed(defaultSpeed); // Reset Speed
         _jumped = false;
     }
     export function UpdateAnimation() { // Updates Animation And State
@@ -118,36 +121,36 @@ namespace Player {
                 /* Bunch of Code That Just Checks If Direction Is Right And State Isn't Already Set
                    Then Updates Animation And State, Pretty Repetitive 
                 */
-                if (_currentDir == Directions.Left && _possible_state != PossibleState.LSlide) {
+                if (_currentDir == LFDirections.Left && _possible_state != PossibleState.LSlide) {
                     animation.runImageAnimation(_sprite, SpriteAnimTex.PlayerBS, 200, true);
                     _possible_state = PossibleState.LSlide;
                 }
-                else if (_currentDir == Directions.Right && _possible_state != PossibleState.RSlide) {
+                else if (_currentDir == LFDirections.Right && _possible_state != PossibleState.RSlide) {
                     animation.runImageAnimation(_sprite, SpriteAnimTex.PlayerFS, 200, true);
                     _possible_state = PossibleState.RSlide;
                 }
             }
             else {
-                if (_currentDir == Directions.Left) _sprite.setImage(SpriteTex.PlayerBJ);
+                if (_currentDir == LFDirections.Left) _sprite.setImage(SpriteTex.PlayerBJ);
                 else _sprite.setImage(SpriteTex.PlayerFJ);
             }
         }
         else {
-            if (_currentDir == Directions.Left && _possible_state != PossibleState.Left) {
+            if (_currentDir == LFDirections.Left && _possible_state != PossibleState.Left) {
                 animation.runImageAnimation(_sprite, SpriteAnimTex.PlayerB, 700, true);
                 _possible_state = PossibleState.Left;
             }
-            else if (_currentDir == Directions.Right && _possible_state != PossibleState.Right) {
+            else if (_currentDir == LFDirections.Right && _possible_state != PossibleState.Right) {
                 animation.runImageAnimation(_sprite, SpriteAnimTex.PlayerF, 700, true);
                 _possible_state = PossibleState.Right;
             }
         }
     } // Maps Direction Enum To Button Press
-    export function IsPressed(move: Directions) {
+    export function IsPressed(move: LFDirections) {
         switch (move) {
-            case Directions.Left:
+            case LFDirections.Left:
                 return controller.left.isPressed();
-            case Directions.Right:
+            case LFDirections.Right:
                 return controller.right.isPressed();
             default:
                 return false;
@@ -157,7 +160,8 @@ namespace Player {
         return _sprite.isHittingTile(CollisionDirection.Left) || _sprite.isHittingTile(CollisionDirection.Right);
     }
     // Checks if LF Direction Has Changed, Then Saves The Previous Direction In _lastDir and Updates _currentDir
-    export function RegisterLFDirection(move: Directions) {
+    export function RegisterLFDirection(move: LFDirections) {
+        if (GameSettings.Paused) return;
         if (move == _currentDir) return;
         _lastDir = _currentDir;
         _currentDir = move;
@@ -165,40 +169,87 @@ namespace Player {
     /* If The Current Direction Stops Being Pressed, And The Last Direction Is, 
         Set _currentDir to _lastDir and set _lastDir to unkown
     */
-    export function RegisterStopMovement(move: Directions) {
+    export function RegisterStopLFMovement(move: LFDirections) {
+        if (GameSettings.Paused) return;
         if (move != _currentDir || !IsPressed(_lastDir)) return;
         _currentDir = _lastDir;
-        _lastDir = Directions.Unknown;
+        _lastDir = LFDirections.Unknown;
     }
     // If Sprite Is On Wall Slow Gravity, else reset Gravity
     export function UpdateGravity() {
-        if (_pause) return;
         if (IsOnWall() && (_possible_state == PossibleState.LSlide || _possible_state == PossibleState.RSlide)) _sprite.ay = 100;
         else _sprite.ay = defaultGravity;
     }
 
-    export function TransitionAnimation() {
-        _possible_state = PossibleState.Unknown;
-        _currentDir = Directions.Unknown;
-        _sprite.ay = 0;
-        _sprite.vy = 0;
-        controller.moveSprite(_sprite, 0, 0);
-        _pause = true;
-        return AnimationScheduler.New(_sprite, SpriteAnimTex.PlayerSwirl, 70, false);
+    export function Update() {
+        if (GameSettings.Paused) {
+            if (GameSettings.WorldsTransition) TransitionContext.WorldTransition();
+            return;
+        }
+        if (Player.Sprite().isHittingTile(CollisionDirection.Bottom)
+            || Player.IsOnWall()) {
+            Player.CancelJumpOverride();
+        }
+        Player.UpdateGravity();
+        Player.UpdateAnimation();
     }
-    export function ResetAnimation() {
-        _possible_state = PossibleState.Right;
-        _currentDir = Directions.Right;
-        controller.moveSprite(_sprite, defaultSpeed, 0);
-        _pause = false;
-        UpdateAnimation();
+
+    namespace TransitionContext {
+        const Anim = SpriteAnimTex.PlayerSwirl;
+        const Wait = Anim.length * 70 + 1;
+        const Incr = 100.0 / 3.0;
+        let sprite: Sprite;
+        let counter: number = 0;
+        export let init: boolean = false;
+        export let finished: boolean = false
+        export function Initialize() {
+            _sprite.setVelocity(0, 0);
+            _sprite.ay = 0;
+            _sprite.setImage(SpriteTex.Blank);
+            game.pushScene();
+            game.onUpdate(UpdateLoop);
+            game.currentScene().flags |= scene.Flag.SeeThrough;
+            sprite = sprites.create(SpriteTex.Blank, SpriteKind.Decal);
+            sprite.setPosition(_sprite.x, _sprite.y);
+            scene.centerCameraAt(_sprite.x, _sprite.y);
+            animation.runImageAnimation(sprite, Anim, 70, false);
+            init = true;
+        }
+        export function Update() {
+            counter += Incr;
+            if (counter > Wait) finished = true;
+        }
+        export function Reset() {
+            counter = 0;
+            init = false;
+            finished = false;
+            sprite.destroy();
+            game.popScene();
+            _sprite.setImage(SpriteTex.PlayerF);
+        }
+
+        export function WorldTransition() {
+            if (!TransitionContext.init) {
+                TransitionContext.Initialize();
+            }
+            else if (!TransitionContext.finished) {
+                TransitionContext.Update();
+            }
+            else {
+                TransitionContext.Reset();
+                GameSettings.WorldsTransition = false;
+                GameSettings.Paused = false;
+            }
+        }
     }
 }
+
 // Global Settings That Can Last Multiple Games
 namespace GameSettings {
     export let WorldID: number = 0;
     export let PlayerLives: number = 1;
     export let Paused: boolean = false;
+    export let WorldsTransition: boolean = false;
     export function LoadSettings() {
         if (settings.exists("world_id")) {
             console.log("Settings loaded");
@@ -225,65 +276,57 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, () => {
     So The Player State Can Change
 */
 controller.left.onEvent(ControllerButtonEvent.Pressed, () => {
-    if (!GameSettings.Paused) Player.RegisterLFDirection(Player.Directions.Left);
+    Player.RegisterLFDirection(Player.LFDirections.Left);
 });
 controller.right.onEvent(ControllerButtonEvent.Pressed, () => {
-    if (!GameSettings.Paused) Player.RegisterLFDirection(Player.Directions.Right);
+    Player.RegisterLFDirection(Player.LFDirections.Right);
 });
 
 controller.left.onEvent(ControllerButtonEvent.Released, () => {
-    Player.RegisterStopMovement(Player.Directions.Left);
+    Player.RegisterStopLFMovement(Player.LFDirections.Left);
 });
 controller.right.onEvent(ControllerButtonEvent.Released, () => {
-    Player.RegisterStopMovement(Player.Directions.Right);
+    Player.RegisterStopLFMovement(Player.LFDirections.Right);
 });
 
-namespace AnimationScheduler {
-    const animator_counter_inc: number = 25;
-    class Animator {
-        counter: number = 0;
-        wait: number;
-        constructor(sprite: Sprite, anim: Image[], speed: number) {
-            animation.runImageAnimation(sprite, anim, speed, false);
-            this.wait = speed * anim.length;
-        }
-        Update() {
-            this.counter += animator_counter_inc;
-            if (this.counter > this.wait) {
-                return true;
-            }
-            return false;
-        }
+namespace Enemy {
+    export enum Type {
+        Spike,
     }
-    let arr: [Animator, boolean][] = [];
-    let freeList: number[] = [];
-    export function New(sprite: Sprite, anim: Image[], speed: number, autodel?: boolean) {
-        let nindex = arr.length;
-        if (freeList.length != 0) {
-            nindex = freeList[freeList.length - 1];
-            freeList.splice(freeList.length - 1, 1);
-        }
-        arr[nindex] = [new Animator(sprite, anim, speed), (autodel != undefined) ? autodel : false];
-        return nindex;
-    }
-    export function Update() {
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] == undefined) continue;
-            let [an, b] = arr[i];
-            if (an.Update() == true) {
-                if (b == true) freeList.push(i);
-                arr[i] = undefined;
-            }
-        }
-    }
-    export function IsValid(id: number) {
-        return (arr[id] !== undefined);
-    }
-    export function Remove(id: number) {
-        freeList.push(id);
-    }
-}
+    export function New(Arena: SpriteArena, Kind: Type): Sprite {
+        let sprite = Arena.New(SpriteTex.Blank);
+        sprites.setDataNumber(sprite, "enemy_type", Kind);
+        switch (Kind) {
+            case Type.Spike:
+                sprite.setImage(SpriteTex.Spike);
+                break;
 
+        }
+        return sprite;
+    }
+    export function Update(Arena: SpriteArena) {
+        Arena.Query((sprite) => {
+            let Kind: Type = sprites.readDataNumber(sprite, "enemy_type");
+            switch (Kind) {
+                case Type.Spike:
+                    break;
+            }
+        });
+    }
+    sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, (player, enemy) => {
+        let Kind: Type = sprites.readDataNumber(enemy, "enemy_type");
+        switch (Kind) {
+            case Type.Spike:
+                let shine = sprites.create(SpriteTex.Blank, SpriteKind.Decal);
+                shine.setPosition(enemy.x, enemy.y - 32);
+                shine.lifespan = 2000;
+                player.setVelocity((player.x - enemy.x) * 10, (player.y - enemy.y) * 5);
+                animation.runImageAnimation(shine, SpriteAnimTex.SpikeShine, 25, false);
+                info.changeLifeBy(-1);
+                break;
+        }
+    });
+}
 /* 
 A Lifetime Manager for Sprites that allow you to make new sprites easily, but
 also can be destroy en mass, without the need for a special spritekind,
@@ -374,7 +417,7 @@ namespace FunctionFactory {
     export function SeagullFlying(x: number, ymin: number, ymax: number, speed: number, ms: number) {
         return StaticMovingSpriteYRange(
             (spr) => {
-                AnimationScheduler.New(spr, SpriteAnimTex.Seagull, 350, true);
+                animation.runImageAnimation(spr, SpriteAnimTex.Seagull, 350, true);
                 spr.z = -200;
                 spr.setFlag(SpriteFlag.GhostThroughWalls, true);
             },
@@ -441,45 +484,34 @@ namespace Worlds {
         }
     }
     let currentWorld: number = 0;
-    let transitionState: boolean = false;
-    let overrideTrans: boolean = false;
-    let playerAnimHandle: number = 0;
+    let initFlag: boolean = false;
     export function Init() {
         let world = GlobalArray[currentWorld];
         world.OnStart();
-        LoadDecals(world);
+        LoadTileMapSprites(world);
     }
     export function Update() { // Run During Main loop, Handles World Swapping Logic
-        if (transitionState) {
-            if (!overrideTrans) {
-                transitionState = false;
-                GlobalArray[currentWorld].OnEnd();
+        if (GameSettings.Paused) return;
+        if (initFlag) {
+            initFlag = false;
+            Init();
+        }
+        else {
+            let world = GlobalArray[currentWorld];
+            world.OnUpdate();
+            if (world.HitPortalFlag) {
+                world.OnEnd();
                 currentWorld++;
-                if (currentWorld >= GlobalArray.length) {
-                    game.splash("You've reached the end of the demo.");
-                    game.reset();
+                if (currentWorld < GlobalArray.length) {
+                    GameSettings.Paused = true;
+                    GameSettings.WorldsTransition = true;
+                    initFlag = true;
                 }
                 else {
-                    Player.ResetAnimation();
-                    scene.cameraFollowSprite(Player.Sprite());
-                    Init();
+                    console.log("End OF DEMO");
+                    game.reset();
                 }
             }
-            else {
-                if (!AnimationScheduler.IsValid(playerAnimHandle)) {
-                    AnimationScheduler.Remove(playerAnimHandle);
-                    overrideTrans = false;
-                }
-            }
-            return;
-        }
-        let world = GlobalArray[currentWorld];
-        world.OnUpdate();
-        if (world.HitPortalFlag) {
-            transitionState = true;
-            overrideTrans = true;
-            playerAnimHandle = Player.TransitionAnimation();
-            scene.centerCameraAt(Player.Sprite().x, Player.Sprite().y);
         }
     }
     function LoadADecal(arena: SpriteArena, x: number, y: number, img: Image) {
@@ -490,7 +522,7 @@ namespace Worlds {
         return sprite;
     }
 
-    function LoadDecals(instance: Instance) { // Loops Over Tiles And Instantiates Decals Where There Are Special Tiles
+    function LoadTileMapSprites(instance: Instance) { // Loops Over Tiles And Instantiates Decals Where There Are Special Tiles
         const isTile = (x: number, y: number, t: Image) => instance.Tilemap.getTileImage(instance.Tilemap.getTile(x, y)) === t;
         for (let x = 0; x < instance.Tilemap.width; x++)
             for (let y = 0; y < instance.Tilemap.height; y++) {
@@ -505,6 +537,11 @@ namespace Worlds {
                     scaling.scaleByPixels(sprite, (instance.Tilemap.height - y) * 16, ScaleDirection.Vertically, ScaleAnchor.Top);
                     scaling.scaleByPixels(sprite, instance.Tilemap.width * 16, ScaleDirection.Horizontally, ScaleAnchor.Top, false);
                     sprite.z = -20;
+                }
+                else if (isTile(x, y, SpecialTiles.Spike)) {
+                    let sprite = Enemy.New(instance.GetArena(SpriteKind.Enemy), Enemy.Type.Spike);
+                    sprite.setPosition(x * 16, y * 16);
+                    tiles.setTileAt(tiles.getTileLocation(x, y), SpecialTiles.Blank);
                 }
             }
     }
@@ -522,7 +559,8 @@ namespace Worlds {
                             20); // wait
                 return [
                     undefined,
-                    () => {
+                    (self) => {
+                        Enemy.Update(self.GetArena(SpriteKind.Enemy));
                         seagullsfly();
                     },
                     undefined
@@ -539,19 +577,15 @@ scene.systemMenu.addEntry(() => "Hello?", () => {
     console.log("Clicked!");
 }, SpriteTex.Redman);
 Worlds.Init();
-game.onUpdate(() => {
-    if (GameSettings.Paused) return;
+
+function UpdateLoop() {
     // Code in this function will run once per frame. MakeCode
     // Arcade games run at 30 FPS
-    if (Player.Sprite().isHittingTile(CollisionDirection.Bottom)
-        || Player.IsOnWall()) {
-        Player.CancelJumpOverride();
-    }
-    Player.UpdateGravity();
-    Player.UpdateAnimation();
-    AnimationScheduler.Update();
+    Player.Update();
     Worlds.Update();
-});
+}
+
+game.onUpdate(UpdateLoop);
 game.onGameOver((state) => {
     if (state === true) game.splash("WINNER");
     else game.splash("LOSER");
